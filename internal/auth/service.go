@@ -23,24 +23,9 @@ func NewAuthService(repo *Repository, cfg *config.Config) *Service {
 	}
 }
 
-type NonceResponse struct {
-	Nonce string `json:"nonce"`
-	Token string `json:"token"`
-}
-
-type SignInResponse struct {
-	Token string `json:"token"`
-}
-
-type SignInRequest struct {
-	Message   string `json:"message"`
-	Signature string `json:"signature"`
-	Token     string `json:"token"`
-}
-
 func (s *Service) GenerateNonce(address string) (*NonceResponse, error) {
 	if err := ethereum.ValidateAddress(address); err != nil {
-		return nil, err
+		return nil, ErrInvalidAddressFormat
 	}
 
 	nonce := siwe.GenerateNonce()
@@ -52,7 +37,7 @@ func (s *Service) GenerateNonce(address string) (*NonceResponse, error) {
 
 	tokenString, err := jwt.GenerateToken([]byte(s.cfg.JWTSecret), time.Minute*5, claims)
 	if err != nil {
-		return nil, err
+		return nil, ErrGenerateNonce
 	}
 
 	return &NonceResponse{
