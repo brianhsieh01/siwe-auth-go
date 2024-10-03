@@ -6,6 +6,7 @@ import (
 	"github.com/Larryx-s-Kitchen/siwe-auth-go/config"
 	"github.com/Larryx-s-Kitchen/siwe-auth-go/internal/auth"
 	"github.com/Larryx-s-Kitchen/siwe-auth-go/internal/database"
+	"github.com/Larryx-s-Kitchen/siwe-auth-go/internal/middleware"
 	"github.com/labstack/echo/v4"
 )
 
@@ -30,6 +31,9 @@ func main() {
 	e.GET("/auth/nonce", handler.GetNonce)
 	e.POST("/auth/signin", handler.SignIn)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	protectedGroup := e.Group("/api")
+	protectedGroup.Use(middleware.JWTMiddleware(cfg.JWTSecret))
+	protectedGroup.GET("/profile", handler.GetProfile)
 
+	e.Logger.Fatal(e.Start(":8080"))
 }

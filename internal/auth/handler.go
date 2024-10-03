@@ -1,8 +1,10 @@
 package auth
 
 import (
+	"encoding/json"
 	"net/http"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
@@ -39,4 +41,21 @@ func (h *Handler) SignIn(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, response)
+}
+
+func (h *Handler) GetProfile(c echo.Context) error {
+	userClaims, ok := c.Get("jwtClaims").(jwt.MapClaims)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Unauthorized"})
+	}
+
+	formattedClaims, err := json.MarshalIndent(userClaims, "", "  ")
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to format claims"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "Profile retrieved successfully",
+		"claims":  json.RawMessage(formattedClaims),
+	})
 }
