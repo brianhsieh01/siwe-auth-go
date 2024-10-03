@@ -26,3 +26,17 @@ func (h *Handler) GetNonce(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, response)
 }
+
+func (h *Handler) SignIn(c echo.Context) error {
+	var req SignInRequest
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request body"})
+	}
+
+	response, err := h.service.VerifySignature(req)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, response)
+}

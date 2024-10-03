@@ -3,6 +3,7 @@ module github.com/Larryx-s-Kitchen/siwe-auth-go
 go 1.22.7
 
 require (
+	github.com/ethereum/go-ethereum v1.12.1
 	github.com/go-pg/pg/v10 v10.13.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/joho/godotenv v1.5.1
@@ -14,7 +15,6 @@ require (
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
 	github.com/dchest/uniuri v1.2.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.1.0 // indirect
-	github.com/ethereum/go-ethereum v1.12.1 // indirect
 	github.com/go-pg/zerochecker v0.2.0 // indirect
 	github.com/holiman/uint256 v1.2.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

@@ -28,6 +28,7 @@ func main() {
 	handler := auth.NewAuthHandler(service)
 
 	e.GET("/auth/nonce", handler.GetNonce)
+	e.POST("/auth/signin", handler.SignIn)
 
 	e.Logger.Fatal(e.Start(":8080"))
 
